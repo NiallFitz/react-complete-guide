@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Person from "./Person/Person";
-import Validation from "./Validation/Validation";
-import Char from "./Char/Char";
+import Radium from "radium";
 
 class App extends Component {
   state = {
@@ -57,11 +56,16 @@ class App extends Component {
 
   render() {
     const style = {
-      backgroundColor: "white",
+      backgroundColor: "green",
+      color: "white",
       font: "inherit",
-      border: "1px solid blue",
+      border: "1px solid black",
       padding: "8px",
-      cursor: "pointer"
+      cursor: "pointer",
+      ":hover": {
+        backgroundColor: "lightgreen",
+        color: "black"
+      }
     };
 
     let persons = null;
@@ -82,50 +86,33 @@ class App extends Component {
           })}
         </div>
       );
+
+      style.backgroundColor = "red";
+      style[":hover"] = {
+        backgroundColor: "salmon",
+        color: "black"
+      };
     }
 
-    const chars = this.state.enteredText.split("").map((character, index) => {
-      return (
-        <Char
-          char={character}
-          key={index}
-          click={() => this.deleteCharHandler(index)}
-        />
-      );
-    });
+    const classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push("red");
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push("bold");
+    }
 
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
-        <p>This is really working!</p>
+        <p className={classes.join(" ")}>This is really working!</p>
         <button style={style} onClick={this.togglePersonsHandler}>
           Toggle Persons
         </button>
         {persons}
-
-        <br />
-        <br />
-        <br />
-
-        <input
-          type="text"
-          value={this.state.enteredText}
-          onChange={(event) => {
-            this.textChangedHandler(event);
-          }}
-        />
-        <br />
-        <br />
-        <p>{this.state.enteredText.length}</p>
-        <br />
-        <Validation length={this.state.enteredText.length} />
-        <br />
-        {chars}
-        <br />
       </div>
     );
-    // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-export default App;
+export default Radium(App);
